@@ -115,7 +115,7 @@ def evaluate(results, accuracy, f1):
     
     # Aesthetics
     pl.suptitle("Performance Metrics for Three Supervised Learning Models", fontsize = 16, y = 1.10)
-    pl.subplots_adjust(top=0.85, bottom=0., left=0.10, right=0.95, hspace=0.3,wspace=0.35)
+    pl.tight_layout()
     pl.show()
     
 
@@ -129,35 +129,15 @@ def feature_plot(importances, X_train, y_train):
     # Creat the plot
     fig = pl.figure(figsize = (9,5))
     pl.title("Normalized Weights for First Five Most Predictive Features", fontsize = 16)
-    rects = pl.bar(np.arange(5), values, width = 0.6, align="center", color = '#00A000', \
-                label = "Feature Weight")
-    
-    # make bar chart higher to fit the text label
-    axes = pl.gca()
-    axes.set_ylim([0, np.max(values) * 1.1])
-
-    # add text label on each bar
-    delta = np.max(values) * 0.02
-    
-    for rect in rects:
-        height = rect.get_height()
-        pl.text(rect.get_x() + rect.get_width()/2., 
-                height + delta, 
-                '%.2f' % height,
-                ha='center', 
-                va='bottom')
-    
-    # Detect if xlabels are too long
-    rotation = 0 
-    for i in columns:
-        if len(i) > 20: 
-            rotation = 10 # If one is longer than 20 than rotate 10 degrees 
-            break
-    pl.xticks(np.arange(5), columns, rotation = rotation)
+    pl.bar(np.arange(5), values, width = 0.6, align="center", color = '#00A000', \
+          label = "Feature Weight")
+    pl.bar(np.arange(5) - 0.3, np.cumsum(values), width = 0.2, align = "center", color = '#00A0A0', \
+          label = "Cumulative Feature Weight")
+    pl.xticks(np.arange(5), columns)
     pl.xlim((-0.5, 4.5))
     pl.ylabel("Weight", fontsize = 12)
     pl.xlabel("Feature", fontsize = 12)
     
     pl.legend(loc = 'upper center')
     pl.tight_layout()
-    pl.show() 
+    pl.show()  
